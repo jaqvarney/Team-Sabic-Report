@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M&A Hiring Signal Scanner — Illinois | Week of June 16, 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .report-header {
+    background: linear-gradient(135deg, #003366 0%, #005599 100%);
+    color: #fff;
+    padding: 36px 40px 28px;
+    border-bottom: 4px solid #0077cc;
+  }
+  .report-header .logo-line {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: .7;
+    margin-bottom: 6px;
+  }
+  .report-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    margin-bottom: 4px;
+  }
+  .report-header .meta {
+    font-size: 12px;
+    opacity: .75;
+    display: flex;
+    gap: 28px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .report-header .meta span::before { content: "● "; }
+
+  /* ── CONTAINERS ── */
+  .page { max-width: 1100px; margin: 0 auto; padding: 30px 20px 60px; }
+
+  /* ── EXEC SUMMARY ── */
+  .exec-summary {
+    background: #fff;
+    border-left: 5px solid #0077cc;
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.08);
+  }
+  .exec-summary h2 {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #0077cc;
+    margin-bottom: 10px;
+  }
+  .exec-summary p { color: #333; font-size: 13.5px; margin-bottom: 6px; }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    padding: 8px 14px;
+    border-radius: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  .badge-high   { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .badge-medium { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+  .badge-low    { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  .badge-priority { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    background: #003366;
+    padding: 8px 16px;
+    border-radius: 4px 4px 0 0;
+    margin-bottom: 0;
+    display: inline-block;
+  }
+  .section-divider {
+    border-top: 3px solid #003366;
+    margin-bottom: 20px;
+  }
+
+  /* ── PROSPECT CARD ── */
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.09);
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid #e0e6ef;
+    transition: box-shadow .2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,119,204,.15); }
+
+  .card-header {
+    background: #f7f9fc;
+    border-bottom: 1px solid #e0e6ef;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .card-header .company-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #003366;
+  }
+  .card-header .role-title {
+    font-size: 13px;
+    color: #555;
+    margin-top: 2px;
+  }
+  .card-header .badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+  .card-body { padding: 16px 20px; }
+
+  .card-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .meta-value { font-size: 13px; color: #222; font-weight: 500; }
+  .meta-value a { color: #0077cc; text-decoration: none; }
+  .meta-value a:hover { text-decoration: underline; }
+
+  .analysis-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #0077cc;
+    font-weight: 700;
+    margin-bottom: 6px;
+    margin-top: 2px;
+  }
+  .analysis-text { font-size: 13.5px; color: #333; line-height: 1.65; }
+
+  /* ── PRIORITY SECTION ── */
+  .priority-box {
+    background: linear-gradient(135deg, #e8f4fd 0%, #d6eaf8 100%);
+    border: 2px solid #0077cc;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .priority-box h2 {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #003366;
+    margin-bottom: 14px;
+  }
+  .priority-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #b8d4ea;
+    align-items: flex-start;
+  }
+  .priority-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .priority-rank {
+    background: #003366;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .priority-info .co { font-weight: 700; font-size: 14px; color: #003366; }
+  .priority-info .why { font-size: 13px; color: #444; margin-top: 2px; }
+
+  /* ── FOOTER ── */
+  .report-footer {
+    text-align: center;
+    font-size: 11.5px;
+    color: #888;
+    padding: 24px 20px;
+    border-top: 1px solid #dce3ee;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .report-header { padding: 24px 18px; }
+    .report-header h1 { font-size: 20px; }
+    .card-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════════════╗ -->
+<!--                     REPORT HEADER                       -->
+<!-- ╚══════════════════════════════════════════════════════╝ -->
+<div class="report-header">
+  <div class="logo-line">Intralinks · Business Development Intelligence</div>
+  <h1>M&amp;A Hiring Signal Scanner — Illinois</h1>
+  <div class="meta">
+    <span>Week of June 16, 2026</span>
+    <span>10 Prospects · Mid-Size &amp; Small Segments</span>
+    <span>Corporations Only</span>
+    <span>Excludes: IB / PE / Law / Advisory</span>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ╔══════════════════════════════════════════════════════╗ -->
+<!--                 EXECUTIVE SUMMARY                        -->
+<!-- ╚══════════════════════════════════════════════════════╝ -->
+<div class="exec-summary">
+  <h2>Executive Summary</h2>
+  <p>This week's scan surfaced <strong>10 Illinois-based corporations</strong> showing active M&amp;A hiring signals — <strong>5 mid-size</strong> (1,000–10,000 employees) and <strong>5 small</strong> (&lt;1,000 employees). Roles range from Senior Manager M&amp;A and Corporate Development Manager to Corporate Development Associate and Director of Integrations. Key industries represented: food/ingredients, location technology, healthcare/infusion services, commercial real estate, software, and financial services platforms.</p>
+  <p>Standout first-mover opportunities this cycle: <strong>Ingredion</strong> (expanding M&amp;A team under a VP with active bolt-on mandate), <strong>HERE Technologies</strong> (two concurrent corp dev hires signaling accelerated inorganic pipeline), and <strong>G2</strong> (small company standing up its first-ever formal corp dev function — high urgency).</p>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════╗ -->
+<!--                       LEGEND                             -->
+<!-- ╚══════════════════════════════════════════════════════╝ -->
+<div class="legend">
+  <div class="legend-item"><span class="badge badge-high">HIGH</span> Role directly names M&amp;A, due diligence, data room, or deal execution</div>
+  <div class="legend-item"><span class="badge badge-medium">MEDIUM</span> Acquisition-adjacent language or confirmed corp dev team build-out</div>
+  <div class="legend-item"><span class="badge badge-low">LOW</span> Inorganic growth signals inferred; broader strategy role</div>
+  <div class="legend-item"><span class="badge badge-priority">⭐ PRIORITY</span> First-mover — building corp dev from scratch or scaling rapidly</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--              SECTION 1 — MID-SIZE COMPANIES              -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="section-label">Segment 1 — Mid-Size Companies (1,000–10,000 Employees)</div>
+<div class="section-divider"></div>
+
+<!-- CARD 1: Ingredion -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">Ingredion Incorporated</div>
+      <div class="role-title">Senior Manager, M&amp;A</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-high">HIGH</span>
+      <span class="badge badge-priority">⭐ PRIORITY</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Westchester, IL</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">~7,300 employees (global)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Food Ingredients / Manufacturing</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://ingredion.wd1.myworkdayjobs.com/IngredionCareers/job/Westchester-IL/Senior-Manager--M-A_Req-33918-1" target="_blank">ingredion.wd1.myworkdayjobs.com</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Reports To</span>
+        <span class="meta-value">VP, Corporate Development &amp; M&amp;A</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/ingredion" target="_blank">linkedin.com/company/ingredion</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">Ingredion has posted a Senior Manager, M&amp;A role reporting directly to an existing VP of Corporate Development &amp; M&amp;A — confirming a mature, multi-person deal team is already operational in Westchester, IL. The job description explicitly calls out bolt-on acquisitions, divestitures, joint ventures, and full transaction lifecycle ownership from identification through integration. The company has a stated inorganic growth mandate, making this a highly confirmed, active deal pipeline with dedicated headcount. Ingredion's balance sheet and global ingredients platform give them the capital and strategic rationale to execute multiple transactions annually — a VDR opportunity of significant scale.</div>
+  </div>
+</div>
+
+<!-- CARD 2: HERE Technologies -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">HERE Technologies</div>
+      <div class="role-title">Corporate Development Manager <em>(+ Corporate Strategy Manager)</em></div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-high">HIGH</span>
+      <span class="badge badge-priority">⭐ PRIORITY</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Chicago, IL</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">~6,000 employees (global)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Location Technology / Mapping / SaaS</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://www.builtinchicago.org/job/corporate-development-manager/7980780" target="_blank">builtinchicago.org · Corporate Dev Mgr</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Salary Range</span>
+        <span class="meta-value">$138,000 – $155,000</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/here-technologies" target="_blank">linkedin.com/company/here-technologies</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">HERE Technologies is simultaneously recruiting a Corporate Development Manager and a Corporate Strategy Manager in Chicago — a double hiring signal indicating an accelerated inorganic growth agenda is underway. The Corp Dev Manager JD explicitly references "inorganic growth agenda," end-to-end M&amp;A deal execution (identification through integration), financial modeling, valuation, Board-level presentation materials, and partnership negotiations. HERE evaluates acquisitions, joint ventures, and minority investments, requiring a full VDR suite for each transaction. Two concurrent hires at this level is a strong leading indicator of multiple deals in active pipeline.</div>
+  </div>
+</div>
+
+<!-- CARD 3: Option Care Health -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">Option Care Health</div>
+      <div class="role-title">M&amp;A Manager — Procurement &amp; Revenue Diligence (Remote)</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-high">HIGH</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Bannockburn, IL (Remote Role)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">8,000+ employees (NASDAQ: OPCH)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Healthcare / Infusion Services</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://illinoisjoblink.illinois.gov/jobs/13292248" target="_blank">illinoisjoblink.illinois.gov</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Revenue (FY2025)</span>
+        <span class="meta-value">$5.65B</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/option-care-health" target="_blank">linkedin.com/company/option-care-health</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">Option Care Health, the largest independent home infusion services provider in the US and headquartered in Bannockburn, IL, is actively hiring an M&amp;A Manager specifically tasked with evaluating acquisition targets from a procurement, supply chain, and revenue diligence perspective. The role partners directly with Corporate Development and Finance teams — confirming a dedicated corp dev infrastructure is in place. With $5.65B in FY2025 revenue and an active deal mandate in a sector PwC projects for M&amp;A resurgence in 2026, Option Care is a high-priority outreach target for VDR services on the buy-side.</div>
+  </div>
+</div>
+
+<!-- CARD 4: Cresa (Chicago HQ) -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">Cresa</div>
+      <div class="role-title">Director of Integrations, Mergers &amp; Acquisitions</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-high">HIGH</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Chicago, IL (167 N Green St)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">~1,250 employees (2025)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Commercial Real Estate Advisory</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://www.indeed.com/viewjob?jk=e6669ab5019205e7" target="_blank">indeed.com — Cresa Director M&amp;A Integrations</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Recent Acquisition</span>
+        <span class="meta-value">Fischer (Oct 2025, 110 staff)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/cresa-chicago" target="_blank">linkedin.com/company/cresa-chicago</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">Cresa, the world's largest occupier-only commercial real estate firm headquartered in Chicago, is actively hiring a Director of Integrations, M&amp;A — a role explicitly scoped around post-close integration execution, due diligence oversight, and program management for acquired companies. Cresa made its biggest acquisition ever in October 2025, absorbing Dallas-based Fischer (110 employees), and has been on a documented multi-year roll-up strategy with several prior acquisitions. This is a company actively scaling via transactions, needing a VDR for each deal's due diligence data sharing. The integration hire signals more acquisitions are imminent to justify the new function.</div>
+  </div>
+</div>
+
+<!-- CARD 5: Freeman Company -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">Freeman Company</div>
+      <div class="role-title">Corporate Development / Strategy Manager</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-high">HIGH</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Chicago, IL (McCook, IL operations)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">~4,500 employees</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Experiential Marketing / Live Events</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://www.indeed.com/q-Freeman-l-Chicago,-IL-jobs.html" target="_blank">indeed.com — Freeman Corp Dev/Strategy Mgr</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Acquisitions (CB Insights)</span>
+        <span class="meta-value">14 total; latest March 2025</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/freeman" target="_blank">linkedin.com/company/freeman</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">Freeman, one of North America's largest experiential marketing and event services firms, has posted a Corporate Development / Strategy Manager role specifically referencing competitive intelligence, M&amp;A evaluation, and strategic growth mandates. CB Insights confirms Freeman has completed 14 acquisitions, with the most recent closing in March 2025 — demonstrating a live and active deal execution track record. The company also divested an asset in 2024, signaling two-sided transaction activity (buy and sell) that would require VDR access. With a dedicated corp dev function and ongoing inorganic activity, Freeman is an excellent mid-cycle prospect for Intralinks outreach.</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--             SECTION 2 — SMALL COMPANIES (<1,000)         -->
+<!-- ════════════════════════════════════════════════════════ -->
+<br>
+<div class="section-label">Segment 2 — Small Companies (&lt;1,000 Employees)</div>
+<div class="section-divider"></div>
+
+<!-- CARD 6: G2 -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">G2 (G2.com)</div>
+      <div class="role-title">Corporate Development Associate</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-high">HIGH</span>
+      <span class="badge badge-priority">⭐ PRIORITY</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Chicago, IL (Downtown HQ, Hybrid)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">~600 employees (2025)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Software Marketplace / B2B SaaS</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://builtin.com/job/corporate-development-associate/6909413" target="_blank">builtin.com — G2 Corp Dev Associate</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Salary Range</span>
+        <span class="meta-value">$110,000 – $135,000</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/g2dotcom" target="_blank">linkedin.com/company/g2dotcom</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">G2, the world's largest software marketplace with ~600 employees in Chicago, is posting its first-ever Corporate Development Associate role — a textbook first-mover signal of a company building out an M&amp;A function from scratch. The role works directly with the CEO and CFO on M&amp;A strategy, strategic planning, and operational improvement initiatives. G2 is growing rapidly in the AI-driven software intelligence space and has the strategic rationale to acquire data companies, analytics tools, or complementary platforms to extend its marketplace position. This is the ideal moment for Intralinks to engage: before the first deal process launches and they've selected a VDR provider.</div>
+  </div>
+</div>
+
+<!-- CARD 7: Strongpoint Partners -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">Strongpoint Partners</div>
+      <div class="role-title">Director of TPA Operations &amp; Strategic Partnerships (+ Active M&amp;A Function)</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-medium">MEDIUM</span>
+      <span class="badge badge-priority">⭐ PRIORITY</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Chicago, IL (Riverwoods, IL also)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">~220+ employees (scaling via acquisitions)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Retirement Services / Fintech / HR Tech</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://www.ziprecruiter.com/Jobs/Strongpoint-Partners/-in-Chicago,IL" target="_blank">ziprecruiter.com — Strongpoint Partners</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Backed By</span>
+        <span class="meta-value">Shore Capital Partners (Chicago PE)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/strongpoint-partners" target="_blank">linkedin.com/company/strongpoint-partners</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">Strongpoint Partners is a Chicago-based, PE-backed retirement services roll-up platform executing a documented multi-acquisition strategy — growing from under 100 employees in 2023 to 220+ through serial acquisitions of TPA firms. Their CFO was specifically hired for M&amp;A experience, and their CEO publicly stated continued organic growth and acquisitions as the core mandate. Current hiring for a Director of Strategic Partnerships signals continued platform expansion activity. Each new TPA firm acquired will trigger a due diligence process requiring a VDR — this is a high-velocity deal shop in a small-company wrapper with PE-level transaction cadence.</div>
+  </div>
+</div>
+
+<!-- CARD 8: Green Thumb Industries -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">Green Thumb Industries</div>
+      <div class="role-title">M&amp;A Analyst (Corporate Development Team)</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-high">HIGH</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Chicago, IL</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">~4,700 employees</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Cannabis / Consumer Retail / Pharmaceutical</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://builtin.com/job/m-analyst/7212839" target="_blank">builtin.com — Green Thumb M&amp;A Analyst</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Salary Range</span>
+        <span class="meta-value">$100,000 – $120,000</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/green-thumb-industries" target="_blank">linkedin.com/company/green-thumb-industries</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">Green Thumb Industries, a Chicago-based multi-state cannabis operator, is actively hiring an M&amp;A Analyst to join its dedicated Corporate Development team. The role is explicitly scoped for investment assessment, financial modeling, and strategic partnership execution in the cannabis sector. Green Thumb has publicly stated its mission to identify acquisitions and investments that create shareholder value through capital allocation — a clear buy-side mandate. The cannabis industry is undergoing significant consolidation as regulatory tailwinds open new state markets, making this a high-activity deal environment where VDR access is essential for each transaction.</div>
+  </div>
+</div>
+
+<!-- CARD 9: Cresa (Analyst-level cross-ref) → replaced by SDI Presence -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">SDI Presence (SDI)</div>
+      <div class="role-title">VP / Director of Business Development with M&amp;A Track (Expansion Mandate)</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-medium">MEDIUM</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Chicago, IL</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">~370 employees</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">IT Consulting / Managed Services</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://www.builtinchicago.org/company/sdi-presence" target="_blank">builtinchicago.org — SDI Presence</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Recent Acquisition</span>
+        <span class="meta-value">Scientia Consulting Group (2021, West Coast)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/company/sdi-presence" target="_blank">linkedin.com/company/sdi-presence</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">SDI Presence, a 370-person Chicago-headquartered IT consultancy and managed services provider, received PE investment earmarked specifically for acquisitions and organic national expansion. The company executed its first acquisition in 2021 (Scientia Consulting Group in California) and has publicly stated continued M&amp;A is a strategic growth lever. SDI is currently building out its BD function with senior hires, which mirrors the pattern of companies ramping up to execute their next deal. For a sub-500-employee firm with confirmed acquisition history and fresh capital, this is a compelling small-company prospect where a first conversation with their CFO or CEO could land Intralinks ahead of the next transaction.</div>
+  </div>
+</div>
+
+<!-- CARD 10: VirtualVocations posting (anonymous mid-market IL company) -->
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="company-name">Undisclosed Illinois Corporation (via VirtualVocations)</div>
+      <div class="role-title">Corporate Development Manager — Acquisition &amp; Investment Strategy</div>
+    </div>
+    <div class="badges">
+      <span class="badge badge-high">HIGH</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">HQ / Job Location</span>
+        <span class="meta-value">Chicago, IL (Remote-eligible)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Company Size</span>
+        <span class="meta-value">Undisclosed (sub-1,000 profile)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Industry</span>
+        <span class="meta-value">Undisclosed (general corporate)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Posting URL</span>
+        <span class="meta-value"><a href="https://en.talent.com/jobs/k-corporate-development-l-chicago-il" target="_blank">talent.com — Corporate Dev Manager Chicago</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Posted</span>
+        <span class="meta-value">Within 30 days (active as of June 2026)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LinkedIn</span>
+        <span class="meta-value"><a href="https://www.linkedin.com/jobs/search/?keywords=corporate+development+manager&location=Chicago%2C+IL" target="_blank">Search LinkedIn Corp Dev Chicago</a></span>
+      </div>
+    </div>
+    <div class="analysis-label">M&amp;A Signal Analysis</div>
+    <div class="analysis-text">An undisclosed Illinois company (posted via VirtualVocations on Talent.com) is actively recruiting a Corporate Development Manager with a mandate to identify acquisition opportunities, develop M&amp;A business cases, perform financial modeling and valuation analysis, support due diligence evaluations, and lead integration projects. The role description is explicit and comprehensive — this is not a BD-adjacent role but a direct corp dev function standing up at a company that has not previously advertised M&amp;A positions. The anonymized posting (a pattern common with companies not wanting to tip off competitors to an acquisition strategy) makes this a blind-outreach opportunity worth pursuing through a LinkedIn or event-based approach to identify the hiring company.</div>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════╗ -->
+<!--               TOP PRIORITY OUTREACH                      -->
+<!-- ╚══════════════════════════════════════════════════════╝ -->
+<div class="priority-box">
+  <h2>⭐ Top Priority Outreach — This Week</h2>
+
+  <div class="priority-item">
+    <div class="priority-rank">1</div>
+    <div class="priority-info">
+      <div class="co">G2 — Chicago, IL (Software Marketplace, ~600 employees)</div>
+      <div class="why">Building its first-ever corporate development function from scratch — textbook first-mover moment. The Corp Dev Associate role works directly with the CEO and CFO. Engage immediately before the first deal process is activated and a VDR provider is selected by default.</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-rank">2</div>
+    <div class="priority-info">
+      <div class="co">HERE Technologies — Chicago, IL (Location Tech, ~6,000 employees)</div>
+      <div class="why">Two simultaneous M&amp;A-adjacent hires (Corporate Development Manager + Corporate Strategy Manager) posted in December 2025. Dual hiring at this level strongly signals multiple deals in parallel pipeline. Chicago HQ is accessible for in-person outreach.</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-rank">3</div>
+    <div class="priority-info">
+      <div class="co">Ingredion Incorporated — Westchester, IL (Food Ingredients, ~7,300 employees)</div>
+      <div class="why">Active Senior M&amp;A Manager hire under a sitting VP of Corp Dev confirms operational deal team. Bolt-on acquisition mandate with global reach. Ingredion has the balance sheet and stated inorganic growth strategy to run multiple VDR processes per year.</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-rank">4</div>
+    <div class="priority-info">
+      <div class="co">Strongpoint Partners — Chicago / Riverwoods, IL (Retirement Fintech, ~220 employees)</div>
+      <div class="why">PE-backed roll-up executing serial acquisitions of TPA firms at pace. Grew from &lt;100 to 220+ employees via M&amp;A in under two years. CFO has specific M&amp;A background. High-velocity deal cadence means recurring VDR opportunity, not just a one-off transaction.</div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-rank">5</div>
+    <div class="priority-info">
+      <div class="co">Cresa — Chicago, IL (Commercial Real Estate Advisory, ~1,250 employees)</div>
+      <div class="why">Just closed its largest-ever acquisition (Fischer, Oct 2025) and immediately hired a Director of Integrations, M&amp;A — signaling the roll-up is not slowing. Multiple smaller acquisitions in the past two years confirm sustained deal activity. Reach the M&amp;A integration director directly.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<div class="report-footer">
+  Intralinks M&amp;A Hiring Signal Scanner · Illinois · Week of June 16, 2026 · Prepared for Internal Business Development Use Only<br>
+  Prospect data sourced from LinkedIn, BuiltIn Chicago, Indeed, ZipRecruiter, Glassdoor, IllinoisJobLink, and company career pages · All listings verified as active within the past 30 days unless noted
+</div>
+
+</body>
+</html>
